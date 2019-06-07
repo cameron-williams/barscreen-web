@@ -1,0 +1,20 @@
+requests
+sqlalchemy
+flask
+flask_sqlalchemy
+flask_login
+flask_bcrypt
+flask_migrate
+gunicorn
+wtforms
+psycopg2-binary
+alembic
+flask_wtf
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib
+oauth2client
+ipython
+google-cloud-storage
+pylint
+systemd  # For journald logging.
