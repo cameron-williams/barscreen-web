@@ -3,3 +3,4 @@
 .DS_store
 .venv
 .env
+*.json

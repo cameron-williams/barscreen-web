@@ -1,0 +1,84 @@
+<html>
+<head>
+  <title>BarScreen - Login</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/login.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+  <link href="static/styles/hamburger.css" rel="stylesheet">
+  <script>
+      var password_url = "{{url_for('dashboard.reset_password')}}";
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="{{ url_for('static', filename='scripts/login.js') }}"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+</head>
+<body>
+{% with messages = get_flashed_messages() %}
+   {% if messages %}
+      {% for message in messages %}
+         {{ message }}
+      {% endfor %}
+   {% endif %}
+{% endwith %}
+  <div class="site_container">
+    <div class="splash_login">
+      <div class="container_login">
+        <img src="static/images/horizontal_logo.png" />
+        <form method="POST" class="main">
+          {{ form.csrf_token }}
+          <div class="form_container">
+            <feildset class="form_username">
+              {{ form.email.label }}{{ form.email }}
+              <!--<label for="username">Username</label>-->
+              <!--<input type="text" id="username" required="required" class="username_input" style>-->
+            </feildset>
+            <feildset class="form_username">
+              {{ form.password.label }}{{ form.password }}
+              <!--<label for="password">Password</label>-->
+              <!--<input type="text" id="password" required="required" class="password_input" style>-->
+              <a class="forgot_password">Forgot?</a>
+            </feildset>
+            <feildset class="signin">
+              {{ form.submit }}
+                <!--<button>Sign In</button>-->
+            </feildset>
+          </div>
+            <feildset class="form_rememberme">
+              <div class="container_rememberme">
+                <input type="checkbox" id="rememberMe" name="rememberMe">
+                <label for="rememberMe">Keep me signed in</label>
+              </div>
+            </feildset>
+        </form>
+        <form class="alternate" style="display:none;">
+          <div class="form_container">
+            <feildset class="form_message">
+              <p>Please submit your account email.</p>
+            </feildset>
+            <feildset class="form_email">
+              <input id="reset_email" name="email" required="" type="text" value="" autocomplete="off">
+            </feildset>
+            <feildset class="signin">
+              <input id="reset_submit" type="submit" name="submit" value="Submit">
+            </feildset>
+          </div>
+        </form>
+        <form class="alternate2" style="display:none;">
+          <div class="form_container">
+            <feildset class="form_message">
+              <p>Thank You.</p>
+            </feildset>
+            <feildset class="form_message">
+              <p>A link has been sent to your email.</p>
+            </feildset>
+            <feildset class="signin">
+              <input id="return_submit" type="submit" name="submit" value="Login">
+            </feildset>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

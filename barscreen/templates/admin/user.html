@@ -20,8 +20,8 @@
     </div>
   </div>
   <div class="add_containers">
-    <a href="{{ url_for('admin.addpromo', user_id=current_user.id) }}"><button class="dash_button">Add New Promo</button></a>
-    <a href="{{ url_for('admin.addloop', user_id=current_user.id) }}"><button class="dash_button">Add New Loop</button></a>
+    <a href="{{ url_for('admin.add_promo', user_id=current_user.id) }}"><button class="dash_button">Add New Promo</button></a>
+    <a href="{{ url_for('admin.add_loop', user_id=current_user.id) }}"><button class="dash_button">Add New Loop</button></a>
   </div>
 </div>
 <div class="section">
@@ -41,7 +41,7 @@
           <tbody>
             {% for l in current_user.loops %}
             <tr>
-              <td><a href="{{ url_for('admin.editloop', loop_id=l.id, user_id=current_user.id) }}">{{ l.name }}</a></td>
+              <td><a href="{{ url_for('admin.edit_loop', loop_id=l.id, user_id=current_user.id) }}">{{ l.name }}</a></td>
               <td>{{ l.playlist|length }}</td>
             </tr>
             {% endfor %}
@@ -58,7 +58,7 @@
           <tbody>
             {% for promo in current_user.promos %}
             <tr>
-              <td><a href="{{ url_for('admin.promoid', promo_id=promo.id, user_id=current_user.id) }}">{{ promo.name }}</a></td>
+              <td><a href="{{ url_for('admin.promo', promo_id=promo.id, user_id=current_user.id) }}">{{ promo.name }}</a></td>
             </tr>
             {% endfor %}
           </tbody>

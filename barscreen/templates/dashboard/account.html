@@ -1,17 +1,17 @@
 {% extends "dashboard_layout.html" %}
-{% block title %}BarsScreen Dashboard - Account{% endblock %}
-{% block h3title %}Account{% endblock %}
-{% block head %}
-  {{ super() }}
+{% block title %}BarsScreen Dashboard - Account{% endblock title %}
+{% block h3title %}Account{% endblock h3title %}
+{% block js %}
+  <!-- Global variables used in file. -->
   <script>
-      var profile_url = "{{url_for('dashboard.editprofile')}}";
-      var email_url = "{{url_for('dashboard.editemail')}}";
-      var password_url = "{{url_for('dashboard.change_password')}}";
+      var profile_url = "{{url_for('dashboard.edit_account')}}";
+      var email_url = "{{url_for('dashboard.edit_account')}}";
+      var password_url = "{{url_for('dashboard.reset_password')}}";
       var user_id = "{{ current_user.id }}";
   </script>
-  <script src="{{ url_for('static', filename='scripts/dash_account.js') }}"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.15/jquery.mask.min.js"></script>
-{% endblock %}
+  <script src="{{ url_for('static', filename='js/dashboard/account.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/jquery.mask.min.js') }}"></script>
+{% endblock js %}
 {% block content %}
   <div class="account_info">
     <div class="account_menu">

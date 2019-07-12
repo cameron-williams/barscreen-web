@@ -1,5 +1,5 @@
 from .base import db, BaseModel
-
+from barscreen.auth import (hash_password, verify_password)
 
 class User(BaseModel):
     """
@@ -20,8 +20,8 @@ class User(BaseModel):
     api_key         = db.Column(db.String, nullable=True)
 
     # Relationships.
-    promos  = db.relationship("promo", backref="user", lazy=True)
-    loops   = db.relationship("loop", backref="user", lazy=True)
+    promos  = db.relationship("Promo", backref="user", lazy=True)
+    loops   = db.relationship("Loop", backref="user", lazy=True)
 
     # Administrator flag.
     admin = db.Column(db.BOOLEAN, default=False)
@@ -61,5 +61,8 @@ class User(BaseModel):
         return str(self.id)
 
     def set_password(self, password):
-        # self.password = hash_password(password)
+        self.password = hash_password(password)
         return True
+    
+    def check_password(self, password):
+        return verify_password(self.password, password)

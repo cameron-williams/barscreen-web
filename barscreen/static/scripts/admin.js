@@ -28,6 +28,11 @@ $(document).ready(function () {
     document.getElementById("loop_img").addEventListener("change", readFile);
   }
 
+  // Sometimes we need to manually set a form name, this will do it (edit loop route).
+  if (_loop_name) {
+    $("#loop_name")[0].value = _loop_name;
+  }
+  
 
   /* Handle button for approving users */
   $("#users_table tbody").on('click', 'button', function () {
@@ -62,6 +67,17 @@ $(document).ready(function () {
   /* Adding Loops */
   /* Creating Loop Item */
   $("#clip_table tbody").on('click', 'button', function () {
+
+    // Get existings loops from form.
+    var loop_data_element = $("#loop_data")[0]
+
+    // Get value as object.
+    var loop_data = []
+    if (loop_data_element.value) {
+      var loop_data = JSON.parse(loop_data_element.value)["data"];
+
+    }
+    
     var row_data = content_table.row($(this).parents('tr')).data();
     var content_name = row_data[1];
     var content_type = row_data[0];
@@ -69,46 +85,52 @@ $(document).ready(function () {
     var ul = $("#loop_content");
     var tr = $("<tr></tr>").append("<td>" + content_name + "</td><td>" + content_type + "</td><td>" + content_id + "</td>")
     ul.append(tr);
+    loop_data.push(content_type + "_" + content_id)
+    
+    // Set new updated loop value.
+    loop_data_element.value = JSON.stringify({"data": loop_data})
   });
 
+
   /* Saving Loop */
-  var array = [];
-  $(".save_container").on('click', 'button', function () {
-    $('#loop_content').has('tr').each(function () {
-      var loop_type = $('#loop_content td:nth-child(2)').map(function () {
-        return $(this).text();
-      })
-      var loop_id = $('#loop_content td:nth-child(3)').map(function () {
-        return $(this).text();
-      });
-      for (var i = 0; i < loop_id.length && i < loop_type.length; i++)
-        array[i] = loop_type[i] + loop_id[i];
-      console.log(array);
-    });
-    var loopname = $("#loop_name").val();
-    var image_data = $("#loop_img_data")[0].innerText
-    console.log(array);
-    console.log("success");
-    console.log(loopname);
-    if (!image_data) {
-      alert("Please select an image for loop.")
-      return
-    }
-    $.ajax({
-      url: post_url,
-      method: "POST",
-      data: JSON.stringify({
-        "name": loopname,
-        "playlist": array,
-        "user_id": user_id,
-        "image_data": image_data,
-      }),
-      dataType: "json",
-      contentType: "application/json",
-      success: function (data) { alert("Sumbited " + loopname + " successfully.") },
-      error: function (errMsg) { alert("Sorry: " + errMsg) },
-    });
-  });
+  // var array = [];
+  // $(".save_container").on('click', 'button', function () {
+  //   $('#loop_content').has('tr').each(function () {
+  //     var loop_type = $('#loop_content td:nth-child(2)').map(function () {
+  //       return $(this).text();
+  //     })
+  //     var loop_id = $('#loop_content td:nth-child(3)').map(function () {
+  //       return $(this).text();
+  //     });
+  //     for (var i = 0; i < loop_id.length && i < loop_type.length; i++)
+  //       array[i] = loop_type[i] + loop_id[i];
+  //     console.log(array);
+  //   });
+
+  //   var loopname = $("#loop_name").val();
+  //   var image_data = $("#loop_img_data")[0].innerText
+  //   console.log(array);
+  //   console.log("success");
+  //   console.log(loopname);
+  //   if (!image_data) {
+  //     alert("Please select an image for loop.")
+  //     return
+  //   }
+  //   $.ajax({
+  //     url: post_url,
+  //     method: "POST",
+  //     data: JSON.stringify({
+  //       "name": loopname,
+  //       "playlist": array,
+  //       "user_id": user_id,
+  //       "image_data": image_data,
+  //     }),
+  //     dataType: "json",
+  //     contentType: "application/json",
+  //     success: function (data) { alert("Sumbited " + loopname + " successfully.") },
+  //     error: function (errMsg) { alert("Sorry: " + errMsg) },
+  //   });
+  // });
 });
 
 $(document).on('click', '#loop_content tr', function () {

@@ -4,6 +4,9 @@ from wtforms.validators import DataRequired
 
 
 class ContactForm(FlaskForm):
+    """
+    Basic contact form for base.contact route.
+    """
     name = StringField("Name", validators=[DataRequired()], render_kw={"placeholder": "Name"})
     email = StringField("Email", validators=[DataRequired()], render_kw={"placeholder": "Email"})
     message = TextAreaField("Message", validators=[DataRequired()], render_kw={"placeholder": "Message", "rows": 4})

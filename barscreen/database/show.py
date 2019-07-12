@@ -12,7 +12,7 @@ class Show(BaseModel):
     lookback    = db.Column(db.Integer, default=1)
     order       = db.Column(db.String, default="recent")
     channel_id  = db.Column(db.Integer, db.ForeignKey('channel.id'), nullable=False)
-    clips       = db.relationship("clip", backref="show", lazy=True)
+    clips       = db.relationship("Clip", backref="show", lazy=True)
 
     def __repr__(self):
         return '<Show {}>'.format(self.name)

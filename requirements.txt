@@ -18,3 +18,4 @@ ipython
 google-cloud-storage
 pylint
 systemd  # For journald logging.
+opencv-python

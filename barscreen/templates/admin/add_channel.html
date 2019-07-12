@@ -1,0 +1,37 @@
+{% extends "admin_layout.html" %}
+{% block title %}Admin - Add Channel{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+    <div class="section">
+      <h2>New Channel</h2>
+      <div class="channel_form_container">
+        <form method="POST"  enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        <div class="form_container">
+          <feildset class="form_cname">
+            {{ form.channel_name.label }}{{ form.channel_name }}
+          </feildset>
+          <feildset class="form_category">
+            {{ form.category.label }}{{ form.category }}
+          </feildset>
+          <feildset class="form_description">
+            {{ form.description.label }}{{ form.description }}
+          </feildset>
+          <feildset class="form_channel_img">
+            {{ form.channel_image.label }}{{ form.channel_image }}
+          </feildset>
+          <feildset class="submit">
+              {{ form.submit }}
+          </feildset>
+        </div>
+      </form>
+      </div>
+      <div>
+        {% if error %}
+        <p><strong>Error:</strong> {{ error }}</p>
+      {% endif %}
+      </div>
+  </div>
+{% endblock %}

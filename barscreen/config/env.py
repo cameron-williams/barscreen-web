@@ -19,3 +19,8 @@ SUBDOMAIN_ROUTING = environ.get("SUBDOMAIN_ROUTING", False)
 # Database config. If none provided will default to an in memory sqlite database.
 DATABASE_URI = environ.get("DATABASE_URL", "sqlite://")
 
+# File upload directory.
+UPLOAD_DIR = environ.get("UPLOAD_DIR", "/tmp/upload/")
+
+# Google application credentials. There is weird formatting with the multi-line private key, so the replace is required for json.loads to work on it.
+GOOGLE_APPLICATION_CREDENTIALS = environ.get("GOOGLE_APPLICATION_CREDENTIALS", "").replace("'", '"')
