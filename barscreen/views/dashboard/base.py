@@ -9,7 +9,7 @@ from barscreen.database import db
 from barscreen.database.promo import Promo
 from barscreen.database.user import User
 from barscreen.forms.login import LoginForm
-from barscreen.forms.password import CreatePassword
+from barscreen.forms.account import CreatePassword
 from barscreen.forms.new_promo import NewPromoForm
 from barscreen.services.google_clients import Gmail, GoogleStorage
 
@@ -45,7 +45,7 @@ def login():
         if matched_user:
         
             # Double check password matches hash.
-            if matched_user.check_password (str(form.password.data)):
+            if matched_user.check_password(str(form.password.data)):
                 login_user(matched_user)
                 if matched_user.admin:
                     return redirect(url_for("admin.index"))

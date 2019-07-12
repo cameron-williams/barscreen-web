@@ -9,7 +9,7 @@ from . import dashboard
 from barscreen.auth import (confirm_token, generate_token, InvalidTokenError)
 from barscreen.database import db
 from barscreen.database.user import User
-from barscreen.forms.password import CreatePassword
+from barscreen.forms.account import (ProfileUpdateForm, CreatePassword)
 from barscreen.services.google_clients import Gmail
 
 
@@ -20,31 +20,29 @@ def account():
     Account Route.
     Displays account information.
     """
-    return render_template("dashboard/account.html")
+    # Initialize update form.
+    form = ProfileUpdateForm()
 
+    # On form post, check if any account attributes need updates.
+    if request.method == "POST" and form.validate_on_submit():
 
-@dashboard.route("/account/edit", methods=["POST"])
-def edit_account():
-    """
-    Account edit route.
-    """
-    print("fucking HELLO?")
-    payload = request.get_json()
-    user = db.session.query(User).filter(User.id==payload.get("user_id")).first()
-    if not user:
-        abort(404)
+        # Check first name.
+        if current_user.first_name != form.first_name.data:
+            current_user.first_name = form.first_name.data
+        # Check last name.
+        if current_user.last_name != form.last_name.data:
+            current_user.last_name = form.last_name.data
+        # Check phone.
+        if current_user.phone_number != form.phone_number.data:
+            current_user.phone_number = form.phone_number.data
+        # Check email.
+        if current_user.email != form.email.data:
+            current_user.email = form.email.data
 
-    # Iterate keys in POST payload.
-    for attr_name, new_value in payload.iteritems():
-        
-        # If attr matches a User attribute continue to edit.
-        if hasattr(user, attr_name):
+        # Commit any updates.
+        db.session.commit()
 
-            # If existing value doesn't equal the new one, change it.
-            if getattr(user, attr_name) != new_value:
-                setattr(user, attr_name, new_value)
-    db.session.commit()
-    return jsonify({"success": True})
+    return render_template("dashboard/account.html", form=form)
 
 
 @dashboard.route("/account/confirm/<token>", methods=["GET", "POST"])
@@ -87,7 +85,8 @@ def reset_password():
     if not req.get("user"):
         abort(404)
     # Try and match email to a user.
-    user = db.session.query(User).filter(User.email == req.get("email")).first()
+    user = db.session.query(User).filter(
+        User.email == req.get("email")).first()
     if not user:
         flash("No account found by that email.")
         return jsonify({"success": False})
@@ -104,8 +103,3 @@ def reset_password():
     gmail.send_email(to=user.email,
                      subject="BarScreen Account", body=email_body)
     return jsonify({"success": True})
-
-
-@dashboard.route("/account/change_password", methods=["GET", "POST"])
-def asdf():
-    pass
