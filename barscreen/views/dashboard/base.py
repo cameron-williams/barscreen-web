@@ -50,14 +50,19 @@ def login():
                 if matched_user.admin:
                     return redirect(url_for("admin.index"))
                 return redirect(url_for("dashboard.index"))
+
+        # Flash error.
         flash("Invalid email or password.", "error")
+
     return render_template("dashboard/login.html", form=form)
 
 
 @dashboard.route("/addpromo", methods=["POST", "GET"])
 @login_required
 def addpromo():
-    """ Add Promo route. Adds clip to whatever the current show that is being edited. """
+    """
+    Add Promo route. Adds clip to whatever the current show that is being edited.
+    """
     error = None
     form = NewPromoForm()
     if request.method == "POST" and form.validate_on_submit():
@@ -87,4 +92,4 @@ def addpromo():
             if 'duplicate key value violates unique constraint' in str(e):
                 error = 'show name already registered.'
         flash("Promo Created.", category="success")
-    return render_template("dashboard/addpromo.html", form=form, error=error, current_user=current_user)
+    return render_template("dashboard/add_promo.html", form=form, error=error, current_user=current_user)

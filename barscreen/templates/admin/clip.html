@@ -1,10 +1,12 @@
 {% extends "admin_layout.html" %}
-{% block title %}Admin - {{ current_clip.name }}{% endblock %}
-{% block head %}
-  {{ super() }}
+
+{% block title %}Admin - {{ current_clip.name }}{% endblock title %}
+
+{% block js %}
   <link href="https://vjs.zencdn.net/7.5.4/video-js.css" rel="stylesheet">
   <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
-{% endblock %}
+{% endblock js %}
+
 {% block content %}
     <div class="section">
       <video id='my-video' class='video-js' controls preload='auto' width='640' height='264'
@@ -17,4 +19,4 @@
       </video>
   <script src='https://vjs.zencdn.net/7.5.4/video.js'></script>
     </div>
-{% endblock %}
+{% endblock content %}

@@ -1,73 +1,78 @@
 {% extends "dashboard_layout.html" %}
+
 {% block title %}BarsScreen Dashboard - Account{% endblock title %}
+
 {% block h3title %}Account{% endblock h3title %}
+
 {% block js %}
-  <!-- Global variables used in file. -->
-  <script>
-      var profile_url = "{{url_for('dashboard.edit_account')}}";
-      var email_url = "{{url_for('dashboard.edit_account')}}";
-      var password_url = "{{url_for('dashboard.reset_password')}}";
-      var user_id = "{{ current_user.id }}";
-      var _email = "{{ current_user.email }}";
-      var _first_name = "{{current_user.first_name}}";
-      var _last_name = "{{current_user.last_name}}";
-      var _phone_number = "{{current_user.phone_number}}";
-  </script>
-  <script src="{{ url_for('static', filename='js/dashboard/account.js') }}"></script>
-  <script src="{{ url_for('static', filename='vendor/jquery.mask.min.js') }}"></script>
+<!-- Global variables used in file. -->
+<script>
+  var profile_url = "{{url_for('dashboard.edit_account')}}";
+  var email_url = "{{url_for('dashboard.edit_account')}}";
+  var password_url = "{{url_for('dashboard.reset_password')}}";
+  var user_id = "{{ current_user.id }}";
+  var _email = "{{ current_user.email }}";
+  var _first_name = "{{current_user.first_name}}";
+  var _last_name = "{{current_user.last_name}}";
+  var _phone_number = "{{current_user.phone_number}}";
+</script>
+<script src="{{ url_for('static', filename='js/dashboard/account.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/jquery.mask.min.js') }}"></script>
 {% endblock js %}
+
 {% block content %}
-  <div class="account_info">
-    <div class="account_menu">
-      <ul>
-        <li class="acc_menu_active">Profile</li>
-        <li>Login</li>
-        <li>Billing</li>
-      </ul>
-    </div>
-    
-    <div class="account_content">
-      <form id="Update" method="POST">
-        {{ form.csrf_token }}
+<div class="account_info">
+  <div class="account_menu">
+    <ul>
+      <li class="acc_menu_active">Profile</li>
+      <li>Login</li>
+      <li>Billing</li>
+    </ul>
+  </div>
+
+  <div class="account_content">
+    <form id="Update" method="POST">
+      {{ form.csrf_token }}
       <div class="account_modal" id="Profile">
         <!-- <form onsubmit="update_profile(event)"> -->
-          <fieldset class="form_cname">
-            {{ form.first_name.label }} {{ form.first_name }}
-            <!-- <label for="fname">First Name</label> -->
-            <!-- <input type="text" id="fname" required="required" class="form_input" value="{{ current_user.first_name }}" style> -->
-          </fieldset>
-          <fieldset class="form_cname">
-            {{ form.last_name.label }} {{ form.last_name }}
-            <!-- <label for="lname">Last Name</label> -->
-            <!-- <input type="text" id="lname" required="required" class="form_input" value="{{ current_user.last_name }}" style> -->
-          </fieldset>
-          <fieldset class="form_cname">
-            {{ form.phone_number.label }} {{ form.phone_number}}
-            <!-- <label for="phone">Phone</label> -->
-            <!-- <input type="text" id="phone" required="required" class="form_input" value="{{ current_user.phone_number }}" style> -->
-          </fieldset>
-          {{ form.save }}
-          <!-- <button class="dash_button" id="profile_save">Save</button> -->
+        <fieldset class="form_cname">
+          {{ form.first_name.label }} {{ form.first_name }}
+          <!-- <label for="fname">First Name</label> -->
+          <!-- <input type="text" id="fname" required="required" class="form_input" value="{{ current_user.first_name }}" style> -->
+        </fieldset>
+        <fieldset class="form_cname">
+          {{ form.last_name.label }} {{ form.last_name }}
+          <!-- <label for="lname">Last Name</label> -->
+          <!-- <input type="text" id="lname" required="required" class="form_input" value="{{ current_user.last_name }}" style> -->
+        </fieldset>
+        <fieldset class="form_cname">
+          {{ form.phone_number.label }} {{ form.phone_number}}
+          <!-- <label for="phone">Phone</label> -->
+          <!-- <input type="text" id="phone" required="required" class="form_input" value="{{ current_user.phone_number }}" style> -->
+        </fieldset>
+        {{ form.save }}
+        <!-- <button class="dash_button" id="profile_save">Save</button> -->
         <!-- </form> -->
       </div>
       <div class="account_modal" style="display:none;" id="Login">
         <!-- <form> -->
-          <fieldset class="form_cname">
-            {{ form.email.label }} {{ form.email }}
-            <!-- <label for="fname">Email</label> -->
-            <!-- <input type="text" id="email" required="required" class="form_input" value="{{ current_user.email }}" style> -->
-          </fieldset>
-          {{ form.save }}
-          <!-- <button class="dash_button" id="email_save">Save</button> -->
+        <fieldset class="form_cname">
+          {{ form.email.label }} {{ form.email }}
+          <!-- <label for="fname">Email</label> -->
+          <!-- <input type="text" id="email" required="required" class="form_input" value="{{ current_user.email }}" style> -->
+        </fieldset>
+        {{ form.save }}
+        <!-- <button class="dash_button" id="email_save">Save</button> -->
         <!-- </form> -->
-          <div class="border_break"></div>
-          <h5>Reset the password for this account.</h5>
-          <button class="dash_button" id="password_save">Change Password</button>
+        <div class="border_break"></div>
+        <h5>Reset the password for this account.</h5>
+        <button class="dash_button" id="password_save">Change Password</button>
       </div>
       <div class="account_modal" style="display:none;" id="Billing">
-        <p>Please reach out to <a href="mailto:info@barscreen.tv">info@barscreen.tv</a> to sort out the details of your invoicing.</p>
+        <p>Please reach out to <a href="mailto:info@barscreen.tv">info@barscreen.tv</a> to sort out the details of your
+          invoicing.</p>
       </div>
     </form>
-    </div>
   </div>
+</div>
 {% endblock %}

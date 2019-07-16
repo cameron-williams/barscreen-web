@@ -4,7 +4,7 @@
 
 {% block js %}
 <script>
-  var post_url = "{{url_for('admin.submit_loop')}}";
+  var post_url = "{{url_for('admin.add_loop', user_id=current_user.id)}}";
   var user_id = "{{ current_user.id }}";
 </script>
 {% endblock %}

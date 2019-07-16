@@ -1,9 +1,7 @@
 {% extends "admin_layout.html" %}
-{% block title %}Admin - {{ current_channel.name }}{% endblock %}
-{% block head %}
-  {{ super() }}
 
-{% endblock %}
+{% block title %}Admin - {{ current_channel.name }}{% endblock title %}
+
 {% block content %}
     <div class="section">
       <div class="channel_header">
@@ -39,4 +37,4 @@
         </table>
       </div>
     </div>
-{% endblock %}
+{% endblock content %}

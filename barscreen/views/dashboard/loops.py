@@ -1,5 +1,6 @@
 from flask import (render_template, flash, request, json, abort)
 from flask_login import (login_required, current_user)
+import logging
 import re
 from werkzeug.utils import secure_filename
 
@@ -11,17 +12,21 @@ from barscreen.database.promo import Promo
 from barscreen.database.show import Show
 from barscreen.forms.new_promo import NewPromoForm
 from barscreen.services.google_clients import GoogleStorage
+from barscreen.services.imaging import screencap_from_video
 
 
 @dashboard.route("/loops")
 @login_required
 def loops():
+    """
+    Base loop view route.
+    """
     return render_template("dashboard/loops.html")
 
 
 @dashboard.route("/loops/<loop_id>")
 @login_required
-def editloop(loop_id):
+def edit_loop(loop_id):
     trends = Channel.query.order_by(Channel.id.desc()).limit(10).all()
     entertainments = Channel.query.order_by(Channel.id.desc()).filter(
         (Channel.category).like('Entertainment')).all()
@@ -53,42 +58,67 @@ def editloop(loop_id):
 
 @dashboard.route("/loops/new", methods=["POST", "GET"])
 @login_required
-def addloop():
-    
-    trends = Channel.query.order_by(Channel.id.desc()).limit(10).all()
-    entertainments = Channel.query.order_by(Channel.id.desc()).filter(
-        (Channel.category).like('Entertainment')).all()
-    sports = Channel.query.order_by(Channel.id.desc()).filter(
-        (Channel.category).like('Sports')).all()
-    news = Channel.query.order_by(Channel.id.desc()).filter(
-        (Channel.category).like('News')).all()
-    form = NewPromoForm()
-    if request.method == "POST" and form.validate_on_submit():
-        storage = GoogleStorage()
-        try:
-            fn = secure_filename(form.promo_file.data.filename)
-            url = storage.upload_promo_video(
-                name=fn, file=form.promo_file.data)
+def add_loop():
+    """
+    Create loop route.
+    """
+    # Query Channels for the 4 categories (trends, entertainment, sports, news).
+    channels = db.session.query(Channel).order_by(Channel.id.desc()).all()
+    channel_categories = {
+        "entertainment": [],
+        "sports": [],
+        "news": [],
+        "trends": []
+    }
 
-            # save vid and get still from it
-            form.promo_file.data.save('/tmp/{}'.format(fn))
-            still_img_path = ""
-            # still_img_path = get_still_from_video_file(
-            # "/tmp/{}".format(fn), 5, output="/var/tmp/{}".format(fn.replace(".mp4", ".png")))
-            still_url = storage.upload_promo_image(
-                name=still_img_path.split("/")[-1], image_data=open(still_img_path).read())
+    # Add 10 channels to trends.
+    channel_categories["trends"] = channels[:10]
+
+    # Iterate Channels and add them to their category.
+    for channel in channels:
+        # Ensure current channel is the dict of categories.
+        if channel.category.lower() in channel_categories:
+            channel_categories[channel.category.lower()].append(channel)
+
+    # Initialize form.
+    form = NewPromoForm()
+
+    # Handle form post (loop create).
+    if request.method == "POST" and form.validate_on_submit():
+        
+        # Save uploaded file locally.
+        uploaded_file = form.save_uploaded_file()
+
+        # Get screencap from uploaded file.
+        screencap = screencap_from_video(uploaded_file)
+
+        # Ensure upload and screencap were successful.
+        if not all([uploaded_file, screencap]):
+            flash("Error creating loop, please try again.")
+            abort(400)
+        
+        # Attempt to upload to GoogleStorage.
+        try:
+            # Initialize GoogleStorage client.
+            storage = GoogleStorage()
+
+            # Upload screencap.
+            screencap_url = storage.upload_file(screencap, bucket="promo_images")
+
+            # Upload video.
+            video_url = storage.upload_file(uploaded_file, bucket="promo_videos")
 
             current_user.promos.append(Promo(
                 name=form.promo_name.data,
                 description=form.description.data,
-                clip_url=url,
-                image_url=still_url,
+                clip_url=video_url,
+                image_url=screencap_url,
             ))
-
             db.session.commit()
-        except Exception as e:
-            db.session.rollback()
-            if 'duplicate key value violates unique constraint' in str(e):
-                error = 'show name already registered.'
-        flash("Promo Created.", category="success")
+        except Exception as err:
+            logging.error("Error uploading promo to user {}: {} {}".format(current_user.id, type(err), err))
+            flash("Error creating loop, please try again.", category="error")
+            abort(400)
+
+        flash("Promo created successfully.", category="success")
     return render_template("dashboard/add_loop.html", form=form, current_user=current_user, trends=trends, entertainments=entertainments, sports=sports, news=news)

@@ -96,6 +96,7 @@ def edit_loop(user_id, loop_id):
         ## Check existing loop attributes vs posted ones to see what we need to update.
         # Check playlist, if none posted for some reason, use the existing one as the "new value".
         loop_playlist = json.loads(form.loop_data.data).get("data", current_loop.playlist)
+        print(loop_playlist, current_loop.playlist)
         if current_loop.playlist != loop_playlist:
             current_loop.playlist = loop_playlist
 

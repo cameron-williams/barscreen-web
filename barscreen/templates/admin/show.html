@@ -1,9 +1,7 @@
 {% extends "admin_layout.html" %}
-{% block title %}Admin - Show{% endblock %}
-{% block head %}
-{{ super() }}
 
-{% endblock %}
+{% block title %}Admin - Show{% endblock title %}
+
 {% block content %}
 <div class="section">
   <div class="channel_header">
@@ -32,7 +30,9 @@
         {% for clip in current_show.clips %}
         <tr>
           <td>{{ clip.date_created }}</td>
-          <td><a href="{{ url_for('admin.clip', clip_id=clip.id, channel_id=channel_id, show_id=current_show.id) }}">{{ clip.name }}</a></td>
+          <td><a
+              href="{{ url_for('admin.clip', clip_id=clip.id, channel_id=channel_id, show_id=current_show.id) }}">{{ clip.name }}</a>
+          </td>
           <td>{{ clip.clip_url }}</td>
         </tr>
         {% endfor %}
@@ -40,4 +40,4 @@
     </table>
   </div>
 </div>
-{% endblock %}
+{% endblock content %}
