@@ -154,7 +154,7 @@ def edit_loop(user_id, loop_id):
                 continue
             loop_playlist.append(
                 {'id': promo.id, 'name': promo.name, 'image_url': promo.image_url, 'type': 'promo'})
-    
+     
         # Add show if current i is show.
         else:
             show = Show.query.filter_by(id=media_id).first()

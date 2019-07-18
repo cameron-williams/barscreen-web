@@ -1,9 +1,44 @@
 """
 Misc Imaging Tools.
 """
+import base64
 import cv2
+from flask import current_app
 import logging
 import os
+
+
+def b64_image_string_to_file(s, filename):
+    """
+    Takes a b64 image string (data:image/{type};base64,{string}). Writes it to a local file
+    at the current app's upload directory, or /tmp if there is none.
+    """
+    # Figure out upload dir, try and use current app or default to /tmp.
+    upload_dir = "/tmp/"
+    if current_app:
+        if current_app.config.get("UPLOAD_DIR"):
+            upload_dir = current_app.config["UPLOAD_DIR"]
+
+    # Get string spec (data:image/{type};base64) and the actual b64 string.
+    string_spec, b64_string = s.split(",")
+
+    # Grab file type as extension from the string_spec.
+    file_extension = ".{}".format(string_spec.split("/")[-1].split(";")[0])
+
+    # Append filename, upload_dir, and extension to create file path.
+    full_path = upload_dir + filename + file_extension
+    
+    # Try to decode the b64 string and write to a file.
+    try:
+        image_decode = base64.decodestring(b64_string)
+        with open(full_path, "wb") as f:
+            f.write(image_decode)
+    except Exception as err:
+        logging.error("Error writing b64 string to file: {} {}".format(type(err), err))
+        return False
+
+    return full_path
+
 
 
 def get_image_size(image_path):
