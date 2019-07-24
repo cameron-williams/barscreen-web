@@ -51,4 +51,3 @@ def read_env(filenames=None, silent=False):
 
     for key, val in new_vars.items():
         os.environ[key] = val
-

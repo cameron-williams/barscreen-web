@@ -10,6 +10,7 @@
   var user_id = "{{ current_user.id }}";
   var loop_id = "{{ current_loop.id }}";
   var save_url = "{{url_for('dashboard.edit_loop', loop_id=current_loop.id)}}";
+  var loop_name = "{{ current_loop.name }}";
   var loop_playlist = {{ loop_playlist| safe }};
 </script>
 <script src="{{ url_for('static', filename='js/dashboard/loop_create_pagination.js') }}"
@@ -22,24 +23,29 @@
 {% block content %}
 <div class="creation_dashboard">
   <div class="playlist_col">
-    <div class="playlist_title">
-      <h3>
-        <div class="title_input"><span style="display:inline-block;">{{ current_loop.name }}</span><input
-            style="display:none;" placeholder="Title" /></div>
-        <i id="title_edit1" style="display:inline-block;" class="fas fa-pen"></i>
-        <i id="title_edit2" style="display:none;" class="far fa-check-circle"></i>
-      </h3>
-      <div class="playlist_image">
-        <img id="loop_preview" />
-        <canvas id="loop_canvas" width="540" height="405"></canvas>
+    <form method="POST">
+      {{ loop_form.csrf_token }}
+      <div class="playlist_title">
+        <h3>
+          <div class="title_input"><span style="display:inline-block;">
+              {{ loop_form.loop_name }}</span><input style="display:none;" placeholder="Title" /></div>
+          <i id="title_edit1" style="display:inline-block;" class="fas fa-pen"></i>
+          <i id="title_edit2" style="display:none;" class="far fa-check-circle"></i>
+        </h3>
+        <div class="playlist_image">
+          {{ loop_form.loop_image }}
+          <img id="loop_preview" />
+          <canvas id="loop_canvas" width="540" height="405"></canvas>
+        </div>
+        {{ loop_form.submit }}
+        <!-- <button class="dash_button" id="save_button">Save</button> -->
       </div>
-      <button class="dash_button" id="save_button">Save</button>
-    </div>
-    <div class="playlist_list">
-      <ul id="playlist">
-
-      </ul>
-    </div>
+      <div class="playlist_list">
+        {{ loop_form.loop_data }}
+        <ul id="playlist">
+        </ul>
+      </div>
+    </form>
   </div>
 
   <div class="content_col">

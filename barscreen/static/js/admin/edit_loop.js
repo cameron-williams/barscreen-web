@@ -1,10 +1,37 @@
+function updatePlaylistData() {
+  /*
+    Iterates all existing items in loop playlist and adds them to loop_data.
+  */
+  // Get existings loops from form.
+  var loop_data_element = $("#loop_data")[0];
+  
+  // Create loop data array.
+  var loop_data = [];
+
+  // Iterate each tr.
+  $("#loop_content tr").each(function () {
+    // Select current li.
+    var li = $(this);
+
+    // Get the item id and type.
+    loop_item_id = li.find("#li_id")[0].textContent;
+    loop_item_type = li.find("#li_type")[0].textContent;
+
+    // Add loop item to playlist.
+    loop_data.push(loop_item_type + "_" + loop_item_id);
+
+    // Set value on form input element.
+    loop_data_element.value = JSON.stringify({ "data": loop_data })
+  });
+}
+
 $(document).ready(function() {
 
     $.each(loop_playlist, function(index, value) {
-      var load_item = $("<tr></tr>").append("<td>" + value.name + "</td><td>" + value.type + "</td><td>" + value.id + "</td>")
+      var load_item = $("<tr></tr>").append("<td>" + value.name + "</td><td id='li_type'>" + value.type + "</td><td id='li_id'>" + value.id + "</td>")
       $("#loop_content").append(load_item);
     });
-  
+    updatePlaylistData();
     //   var array = [];
     //   $(".edit_container").on('click', 'button', function () {
     //     $('#loop_content').has('tr').each(function () {

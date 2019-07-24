@@ -1,112 +1,88 @@
-$(document).ready(function () {
+function updateFormImage() {
+  // Set form file input to data url of canvas.
+  $("#loop_image")[0].value = $("#loop_preview")[0].src;
+}
 
-  function updateFormImage() {
-    // Set form file input to data url of canvas.
-    $("#loop_image")[0].value = $("#loop_preview")[0].src;
+
+function image_creator() {
+  /*
+    Image factory function. Will turn the current playlist into
+    a meshed together image using 1-4 playlist items.
+  */
+
+  // Variable declaration.
+  var thumbnails = [];
+  var canvas = $("#loop_canvas");
+  var img = $("#loop_preview");
+
+  // Static dimensions for image modes 1-4
+  var image_dimension_modes = {
+    1: {
+      0: [0, 0, 540, 405]
+    },
+    2: {
+      0: [0, 0, 270, 205.5],
+      1: [270, 205.5, 270, 205.5],
+    },
+    3: {
+      0: [0, 0, 270, 205.5],
+      1: [270, 0, 260, 205.5],
+      2: [135, 205.5, 270, 205.5],
+    },
+    4: {
+      0: [0, 0, 270, 205.5],
+      1: [260, 0, 260, 205.5],
+      2: [0, 205.5, 270, 205.5],
+      3: [270, 205.5, 270, 205.5],
+    },
   }
 
-  image_creator = function () {
-    var thumbnails = []
-    var canvas = $("#loop_canvas");
-    var img = $("#loop_preview");
-    var ctx = canvas.get(0).getContext("2d");
-    ctx.clearRect(0, 0, 540, 405);
-    $('#playlist').find('img').each(function () {
-      thumbnails.push($(this).attr("src"));
-    });
-    if (thumbnails.length >= 4) {
-      var image1 = new Image();
-      var image2 = new Image();
-      var image3 = new Image();
-      var image4 = new Image();
-      image1.crossOrigin = "";
-      image2.crossOrigin = "";
-      image3.crossOrigin = "";
-      image4.crossOrigin = "";
-      image1.src = thumbnails[0]
-      image2.src = thumbnails[1]
-      image3.src = thumbnails[2]
-      image4.src = thumbnails[3]
-      image1.onload = function () {
-        ctx.drawImage(image1, 0, 0, 270, 205.5);
-        img.attr("src", canvas[0].toDataURL("image/png"));
-        updateFormImage()
-      }
-      image2.onload = function () {
-        ctx.drawImage(image2, 270, 0, 270, 205.5);
-        img.attr("src", canvas[0].toDataURL("image/png"));
-        updateFormImage()
-      }
-      image3.onload = function () {
-        ctx.drawImage(image3, 0, 205.5, 270, 205.5);
-        img.attr("src", canvas[0].toDataURL("image/png"));
-        updateFormImage()
-      }
-      image4.onload = function () {
-        ctx.drawImage(image4, 270, 205.5, 270, 205.5);
-        img.attr("src", canvas[0].toDataURL("image/png"));
-        updateFormImage()
-      }
+  // Canvas 2d context.
+  var context = canvas.get(0).getContext("2d");
+
+  // Spawn clear rectangle context for canvas image.
+  context.clearRect(0, 0, 540, 405)
+
+  // Populate thumbnails from playlist.
+  $('#playlist').find('img').each(function () {
+    thumbnails.push($(this).attr("src"));
+  });
+
+  // Set image mode from number of thumbnails (maxing at 4).
+  var image_mode = thumbnails.slice(0, 4).length;
+
+  // If not image mode 4, add blank background.
+  if (image_mode != 4) {
+    context.fillStyle = "#232323";
+    context.fillRect(0, 0, 540, 405)
+  }
+
+  // Iterate each thumbnail and add them to the canvas.
+  thumbnails.slice(0, 4).forEach((item, index) => {
+
+    // Create new image, set crossorigin and src.
+    var image = new Image();
+    image.crossOrigin = "";
+    image.src = item;
+
+    // Get current image dimensions based off index and image mode.
+    var img_dimensions = image_dimension_modes[image_mode][index]
+
+    // Add onload function which draws the image to canvas, and updates the preview image to the new canvas image.
+    image.onload = function () {
+
+      // Draw image to canvas.
+      context.drawImage(image, img_dimensions[0], img_dimensions[1], img_dimensions[2], img_dimensions[3])
+
+      // Update preview image.
+      img.attr('src', canvas[0].toDataURL("image/png"));
+      updateFormImage()
     }
-    if (thumbnails.length == 3) {
-      var image1 = new Image();
-      var image2 = new Image();
-      var image3 = new Image();
-      image1.crossOrigin = "";
-      image2.crossOrigin = "";
-      image3.crossOrigin = "";
-      image1.src = thumbnails[0]
-      image2.src = thumbnails[1]
-      image3.src = thumbnails[2]
-      ctx.fillStyle = "#232323";
-      ctx.fillRect(0, 0, 540, 405);
-      image1.onload = function () {
-        ctx.drawImage(image1, 0, 0, 270, 205.5);
-        img.attr("src", canvas[0].toDataURL("image/png"));
-        updateFormImage()
-      }
-      image2.onload = function () {
-        ctx.drawImage(image2, 270, 0, 270, 205.5);
-        img.attr("src", canvas[0].toDataURL("image/png"));
-        updateFormImage()
-      }
-      image3.onload = function () {
-        ctx.drawImage(image3, 135, 205.5, 270, 205.5);
-        img.attr("src", canvas[0].toDataURL("image/png"));
-        updateFormImage()
-      }
-    }
-    if (thumbnails.length == 2) {
-      var image1 = new Image();
-      var image2 = new Image();
-      image1.crossOrigin = "";
-      image2.crossOrigin = "";
-      image1.src = thumbnails[0]
-      image2.src = thumbnails[1]
-      ctx.fillStyle = "#232323";
-      ctx.fillRect(0, 0, 540, 405);
-      image1.onload = function () {
-        ctx.drawImage(image1, 0, 0, 270, 205.5);
-        img.attr("src", canvas[0].toDataURL("image/png"));
-        updateFormImage()
-      }
-      image2.onload = function () {
-        ctx.drawImage(image2, 270, 205.5, 270, 205.5);
-        img.attr("src", canvas[0].toDataURL("image/png"));
-        updateFormImage()
-      }
-    }
-    if (thumbnails.length == 1) {
-      var image1 = new Image();
-      image1.crossOrigin = "";
-      image1.src = thumbnails[0]
-      image1.onload = function () {
-        ctx.drawImage(image1, 0, 0, 540, 405);
-        img.attr("src", canvas[0].toDataURL("image/png"));
-        updateFormImage()
-      }
-    }
-  };
+  })
+}
+
+
+$(document).ready(function () {
 
   $(".content_channel").click(function () {
     $(document).find(".channel").hide()

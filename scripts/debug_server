@@ -9,6 +9,12 @@ sys.path.insert(0, PROJECT_DIR)
 # Import app factory.
 from barscreen.app import create_app
 
+
+
 # Initilize local app in debug mode.
 app = create_app()
+
+# Print useful information for debugging.
+print(" * Using database: {}".format(app.config["SQLALCHEMY_DATABASE_URI"]))
+
 app.run("127.0.0.1", port=5000, debug=True)

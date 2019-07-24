@@ -8,7 +8,7 @@ from barscreen.auth import (
     requires_admin, generate_token, confirm_token)
 from barscreen.database import db
 from barscreen.database.user import User
-from barscreen.forms.password import CreatePassword
+from barscreen.forms.account import CreatePassword
 from barscreen.services.google_clients import Gmail
 
 @admin.route("/")

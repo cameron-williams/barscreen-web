@@ -13,6 +13,10 @@ import os
 from barscreen.config.env import (SECRET_KEY, SECURITY_PASSWORD_SALT)
 
 
+class InvalidTokenError(Exception):
+    pass
+
+
 def requires_admin(f):
     """
     Route decorator. User must be admin to access.
@@ -24,10 +28,6 @@ def requires_admin(f):
             return redirect(url_for("dashboard.login"))
         return f(*args, **kwargs)
     return wrapper
-
-
-class InvalidTokenError(Exception):
-    pass
 
 
 def generate_token(email, expires=True):
