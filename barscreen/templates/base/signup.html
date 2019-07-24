@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% block title %}BarsScreen - Sign Up{% endblock title %}
+
+{% block js %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base/signup.css') }}">
+<script src="{{ url_for('static', filename='vendor/jquery.mask.min.js') }}"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#phone').mask('(000) 000-0000');
+  });
+</script>
+{% endblock js %}
+
+{% block content %}
+<div class="splash_signup" id="signup">
+</div>
+<div class="section_splash">
+  <div class="title">
+    <h3>Sign Up</h3>
+  </div>
+</div>
+<div class="section">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="flash_message">
+    {% for message in messages %}
+    <span>{{ message }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+  <div class="signup_copy">
+    <h3>Please fill out the form below to become a BarScreen restaurant partner.</h3>
+  </div>
+  <form method="POST">
+    {{ form.csrf_token }}
+    <div class="form_container">
+      <feildset class="form_fname">
+        {{ form.first_name.label }}{{ form.first_name }}
+        <!--<label for="fname">First Name:</label>-->
+        <!--<input type="text" id="fname" required="required" class="form_input" style>-->
+      </feildset>
+      <feildset class="form_lname">
+        {{ form.last_name.label }}{{ form.last_name }}
+        <!--<label for="lname">Last Name:</label>-->
+        <!--<input type="text" id="lname" required="required" class="form_input" style>-->
+      </feildset>
+      <feildset class="form_email">
+        {{ form.email.label }}{{ form.email }}
+        <!--<label for="email">Email:</label>-->
+        <!--<input type="text" id="email" required="required" class="form_input" style>-->
+      </feildset>
+      <feildset class="form_phone">
+        {{ form.phone.label }}{{ form.phone }}
+        <!--<label for="phone">Phone:</label>-->
+        <!--<input type="text" id="phone" required="required" class="form_input" style>-->
+      </feildset>
+      <feildset class="form_company">
+        {{ form.company.label }}{{ form.company }}
+        <!--<label for="company">Company:</label>-->
+        <!--<input type="text" id="phone" required="required" class="form_input" style>-->
+      </feildset>
+      <feildset class="submit">
+        {{ form.submit }}
+        <!--<button>Submit</button>-->
+      </feildset>
+    </div>
+  </form>
+</div>
+{% endblock %}

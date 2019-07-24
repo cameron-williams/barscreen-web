@@ -1,19 +1,42 @@
 <html>
+
 <head>
   {% block head %}
   <title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/dashboard.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/loader.css') }}">
-  <link href="{{ url_for('static', filename='styles/hamburger.css') }}" rel="stylesheet">
+
+  <!-- Site CSS -->
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-  <script src="{{ url_for('static', filename='scripts/loader.js') }}" type="text/javascript"></script>
-  <script src="{{ url_for('static', filename='scripts/header.js') }}" type="text/javascript"></script>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/dashboard/dashboard.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/loader.css') }}">
+
+  <!-- Vendor CSS -->
+  <link href="{{ url_for('static', filename='vendor/hamburger.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/all.css') }}">
+
+  <!-- Page specific CSS -->
+  {% block css %}
+  {% endblock css %}
+
+
+
+
+  <!-- Vendor JS -->
+  <script src="{{ url_for('static', filename='vendor/jquery.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/Chart.min.js') }}"></script>
+
+  <!-- Site JS -->
+  <script src="{{ url_for('static', filename='js/loader.js') }}" type="text/javascript"></script>
+  <script src="{{ url_for('static', filename='js/header.js') }}"></script>
+
+  <!-- Page specific JS -->
+  {% block js %}
+  {% endblock js %}
+
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  {% endblock %}
+
+  {% endblock head %}
 </head>
+
 <body>
   <nav>
     <div class="nav_container">
@@ -27,9 +50,18 @@
       </button>
       <div class="nav_menu">
         <ul>
-          <a href="{{ url_for('dashboard.index') }}"><li>Dashboard</li></a>
-          <a href="{{ url_for('dashboard.loops') }}"><li>Loops</li></a>
-          <a href="{{ url_for('dashboard.account') }}"><li>Account</li></a>
+          <a href="{{ url_for('dashboard.index') }}">
+            <li>Dashboard</li>
+          </a>
+          <a href="{{ url_for('dashboard.loops') }}">
+            <li>Loops</li>
+          </a>
+          <a class="hamburger_item" href="{{ url_for('dashboard.account') }}">
+            <li>Account</li>
+          </a>
+          <a class="hamburger_item" href="{{ url_for('dashboard.logout') }}">
+            <li>Log Out</li>
+          </a>
         </ul>
       </div>
       <div class="account_icon">
@@ -39,11 +71,21 @@
     </div>
   </nav>
   <div class="title_container">
-    <h3 class="title">{% block h3title %}{% endblock %}</h3>
+    <h3 class="title">{% block h3title %}{% endblock h3title %}</h3>
   </div>
   <div id="loader"></div>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="flash_message">
+    {% for message in messages %}
+    <span>{{ message }}</span>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
   <div id="content">
-  {% block content %}{% endblock %}
+    {% block content %}{% endblock content %}
   </div>
 </body>
+
 </html>

@@ -1,107 +1,110 @@
 {% extends "dashboard_layout.html" %}
+
 {% block title %}BarsScreen Dashboard - Redbull Channel{% endblock %}
+
 {% block h3title %}Channel{% endblock %}
-{% block head %}
-  {{ super() }}
-{% endblock %}
+
 {% block content %}
-  <div class="toplevel_container">
-    <div class="channel_image">
-      <img src="static/images/armchair.png">
+<div class="toplevel_container">
+  <div class="channel_image">
+    <img src="static/images/armchair.png">
+  </div>
+  <div class="channel_desc">
+    <h2>Armchair Tourist</h2>
+    <p>Category: <span>Sports</span></p>
+    <p>ArmchairTourist lets you vicariously enjoy the sights and sounds of well known, and obscure travel locations from
+      around the world. Watch online, on select broadcast channels, in-flight and in hotel rooms around the world. Enjoy
+      our beach scenes, asian markets, European cafes, fountains, skylines and train stations – from around the planet.
+    </p>
+    <p>Number of clips: <span>15</span></p>
+  </div>
+</div>
+<div class="channelselect_container">
+  <div class="channelselect">
+    <h2>Show:</h2>
+    <select>
+      <option value="all">All Clips</option>
+      <option value="quickbreak">Quick Break</option>
+      <option value="winter">Winter</option>
+      <option value="climbing">Climbing</option>
+      <option value="music">Music</option>
+      <option value="motogp">Moto GP</option>
+    </select>
+  </div>
+</div>
+<div class="cliplibrary_container">
+  <div class="cliplibrary">
+    <div class="show_clip">
+      <div class="clip_container">
+        <img src="static/images/surf.jpeg">
+        <i class="fas fa-play" id="play"></i>
+        <p id="clip_length">2:30</p>
+      </div>
     </div>
-    <div class="channel_desc">
-      <h2>Armchair Tourist</h2>
-      <p>Category: <span>Sports</span></p>
-      <p>ArmchairTourist lets you vicariously enjoy the sights and sounds of well known, and obscure travel locations from around the world. Watch online, on select broadcast channels, in-flight and in hotel rooms around the world. Enjoy our beach scenes, asian markets, European cafes, fountains, skylines and train stations – from around the planet.</p>
-      <p>Number of clips: <span>15</span></p>
+    <div class="show_clip">
+      <div class="clip_container">
+        <img src="static/images/surf.jpeg">
+        <i class="fas fa-play" id="play"></i>
+        <p id="clip_length">2:30</p>
+      </div>
+    </div>
+    <div class="show_clip">
+      <div class="clip_container">
+        <img src="static/images/surf.jpeg">
+        <i class="fas fa-play" id="play"></i>
+        <p id="clip_length">2:30</p>
+      </div>
+    </div>
+    <div class="show_clip">
+      <div class="clip_container">
+        <img src="static/images/surf.jpeg">
+        <i class="fas fa-play" id="play"></i>
+        <p id="clip_length">2:30</p>
+      </div>
+    </div>
+    <div class="show_clip">
+      <div class="clip_container">
+        <img src="static/images/surf.jpeg">
+        <i class="fas fa-play" id="play"></i>
+        <p id="clip_length">2:30</p>
+      </div>
+    </div>
+    <div class="show_clip">
+      <div class="clip_container">
+        <img src="static/images/surf.jpeg">
+        <i class="fas fa-play" id="play"></i>
+        <p id="clip_length">2:30</p>
+      </div>
+    </div>
+    <div class="show_clip">
+      <div class="clip_container">
+        <img src="static/images/surf.jpeg">
+        <i class="fas fa-play" id="play"></i>
+        <p id="clip_length">2:30</p>
+      </div>
+    </div>
+    <div class="show_clip">
+      <div class="clip_container">
+        <img src="static/images/surf.jpeg">
+        <i class="fas fa-play" id="play"></i>
+        <p id="clip_length">2:30</p>
+      </div>
+    </div>
+    <div class="show_clip">
+      <div class="clip_container">
+        <img src="static/images/surf.jpeg">
+        <i class="fas fa-play" id="play"></i>
+        <p id="clip_length">2:30</p>
+      </div>
+    </div>
+    <div class="show_clip">
+      <div class="clip_container">
+        <img src="static/images/surf.jpeg">
+        <i class="fas fa-play" id="play"></i>
+        <p id="clip_length">2:30</p>
+      </div>
     </div>
   </div>
-  <div class="channelselect_container">
-    <div class="channelselect">
-      <h2>Show:</h2>  
-      <select>
-        <option value="all">All Clips</option>
-        <option value="quickbreak">Quick Break</option>
-        <option value="winter">Winter</option>
-        <option value="climbing">Climbing</option>
-        <option value="music">Music</option>
-        <option value="motogp">Moto GP</option>
-      </select>
-    </div>
-  </div>
-  <div class="cliplibrary_container">
-    <div class="cliplibrary">
-      <div class="show_clip">
-        <div class="clip_container">
-          <img src="static/images/surf.jpeg">
-          <i class="fas fa-play" id="play"></i>
-          <p id="clip_length">2:30</p>
-        </div>
-      </div>
-      <div class="show_clip">
-        <div class="clip_container">
-          <img src="static/images/surf.jpeg">
-          <i class="fas fa-play" id="play"></i>
-          <p id="clip_length">2:30</p>
-        </div>
-      </div>
-      <div class="show_clip">
-        <div class="clip_container">
-          <img src="static/images/surf.jpeg">
-          <i class="fas fa-play" id="play"></i>
-          <p id="clip_length">2:30</p>
-        </div>
-      </div>
-      <div class="show_clip">
-        <div class="clip_container">
-          <img src="static/images/surf.jpeg">
-          <i class="fas fa-play" id="play"></i>
-          <p id="clip_length">2:30</p>
-        </div>
-      </div>
-      <div class="show_clip">
-        <div class="clip_container">
-          <img src="static/images/surf.jpeg">
-          <i class="fas fa-play" id="play"></i>
-          <p id="clip_length">2:30</p>
-        </div>
-      </div>
-      <div class="show_clip">
-        <div class="clip_container">
-          <img src="static/images/surf.jpeg">
-          <i class="fas fa-play" id="play"></i>
-          <p id="clip_length">2:30</p>
-        </div>
-      </div>
-      <div class="show_clip">
-        <div class="clip_container">
-          <img src="static/images/surf.jpeg">
-          <i class="fas fa-play" id="play"></i>
-          <p id="clip_length">2:30</p>
-        </div>
-      </div>
-      <div class="show_clip">
-        <div class="clip_container">
-          <img src="static/images/surf.jpeg">
-          <i class="fas fa-play" id="play"></i>
-          <p id="clip_length">2:30</p>
-        </div>
-      </div>
-      <div class="show_clip">
-        <div class="clip_container">
-          <img src="static/images/surf.jpeg">
-          <i class="fas fa-play" id="play"></i>
-          <p id="clip_length">2:30</p>
-        </div>
-      </div>
-      <div class="show_clip">
-        <div class="clip_container">
-          <img src="static/images/surf.jpeg">
-          <i class="fas fa-play" id="play"></i>
-          <p id="clip_length">2:30</p>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
 
 {% endblock %}

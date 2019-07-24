@@ -23,4 +23,5 @@ from IPython import start_ipython
 from barscreen.database import *
 
 # Initialize ipython shell with all locals imported.
-start_ipython(argv=["--no-banner"], user_ns=locals())
+with shell_app.app_context():
+    start_ipython(argv=["--no-banner"], user_ns=locals())

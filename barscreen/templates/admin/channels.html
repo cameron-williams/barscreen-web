@@ -1,14 +1,12 @@
 {% extends "admin_layout.html" %}
-{% block title %}Admin - Channels{% endblock %}
-{% block head %}
-  {{ super() }}
 
-{% endblock %}
+{% block title %}Admin - Channels{% endblock title %}
+
 {% block content %}
 
     <div class="section">
       <h2>Channels</h2>
-      <a href="{{ url_for('admin.addchannel') }}"><button class="dash_button">Add New</button></a>
+      <a href="{{ url_for('admin.add_channel') }}"><button class="dash_button">Add New</button></a>
       <table id="channels_table" class="display">
         <thead>
           <tr>
@@ -19,7 +17,7 @@
         <tbody>
           {% for channel in channels %}
           <tr>
-            <td><a href="{{ url_for('admin.channelid', channel_id=channel.id) }}">{{ channel.name }}</a></td>
+            <td><a href="{{ url_for('admin.channel', channel_id=channel.id) }}">{{ channel.name }}</a></td>
             <td>{{ channel.category }}</td>
           </tr>
           {% endfor %}
@@ -27,4 +25,4 @@
       </table>
     </div>
 
-{% endblock %}
+{% endblock content %}

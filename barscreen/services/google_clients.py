@@ -1,11 +1,16 @@
 import base64
+import json
+import logging
 import mimetypes
 import os
+from flask import current_app
+
 from email.mime.audio import MIMEAudio
 from email.mime.base import MIMEBase
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
 from googleapiclient import discovery
 from googleapiclient.errors import HttpError
 from oauth2client.service_account import ServiceAccountCredentials
@@ -74,7 +79,7 @@ class Sheets(API):
     def create(self, title):
         """
         Method to create a new google sheet
-        Refer here to see what values are returned:
+        Refer here to see what values are returned:name
         https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets#Spreadsheet
 
         :param title: Title of the spreadsheet
@@ -425,93 +430,58 @@ class Gmail(API):
 class GoogleStorage(object):
     """
     Class for interacting with the Google Cloud Storage API.
-
-    TODO for this class:
-        - DRY fixes. Probably only need 2 functions
-            upload_image_data(name, bucket, data)
-            upload_file(name, bucket, file)
     """
     # Holds last grabbed bucket to try and minimize API queries during same session.
     _bucket = None
 
     def __init__(self):
-        credentials = service_account.Credentials.from_service_account_file('service-account-key.json')
-        self.client = storage.Client(
-            credentials=credentials)
-    
+        assert current_app.config["GOOGLE_CREDENTIALS"], "No GOOGLE_APPLICATION_CREDENTIALS set, please set them correctly as an env variable."
+        self.client = storage.Client.from_service_account_json(current_app.config["GOOGLE_CREDENTIALS"])
+
     def bucket(self, name):
         """
-        Attempts to retreive given bucket name.
+        Attempts to retreive given bucket name. Will cache it if it exists for more efficient api operation.
         """
         # Check if given bucket name matches our currently cached bucket.
-        if self._bucket.name == name:
+        if self._bucket and self._bucket.name == name:
             return self._bucket
+
         # Name didn't match, grab bucket from Google and cache it.
         self._bucket = self.client.get_bucket(name)
         return self._bucket
 
-    # Below needs changing.
-    def upload_channel_image(self, name, image_data):
-        """ Takes image_data and a name and uploads the channel image """
-        bucket = self.bucket("cdn.barscreen.tv")
-        existing = bucket.get_blob("channel_images/{}".format(name))
-        if existing:
-            return existing.public_url
-        blob = bucket.blob("channel_images/{}".format(name))
-        blob.upload_from_string(image_data)
-        blob.make_public()
-        return blob.public_url
+    def upload_file(self, file_path, bucket, make_public=True):
+        """
+        Uploads file from given file path to GoogleStorage under specified bucket.
 
-    def upload_clip_video(self, name, file):
-        bucket = self.bucket("cdn.barscreen.tv")
-        existing = bucket.get_blob("clip_videos/{}".format(name))
-        if existing:
-            return existing.public_url
-        blob = bucket.blob("clip_videos/{}".format(name))
-        blob.upload_from_file(file)
-        blob.make_public()
-        return blob.public_url
+        :file_path:   str,  full path to file to upload.
+        :bucket:      str,  name of bucket to upload to. (e.g channel_images)
+        :make_public: bool, optional bool to make file public or not.
+        """
+        try:
+            # Get filename from path.
+            filename = os.path.split(file_path)[-1]
 
-    def upload_promo_video(self, name, file):
-        bucket = self.bucket("cdn.barscreen.tv")
-        existing = bucket.get_blob("promo_videos/{}".format(name))
-        if existing:
-            return existing.public_url
-        blob = bucket.blob("promo_videos/{}".format(name))
-        blob.upload_from_file(file)
-        blob.make_public()
-        return blob.public_url
+            # Get the cdn bucket.
+            _bucket = self.bucket("cdn.barscreen.tv")
 
-    def upload_promo_image(self, name, image_data):
-        assert isinstance(image_data, (str, unicode)), 'invalid option for image data, must be data string.'
-        bucket = self.bucket("cdn.barscreen.tv")
-        existing = bucket.get_blob("promo_images/{}".format(name))
-        if existing:
-            return existing.public_url
-        blob = bucket.blob("promo_images/{}".format(name))
-        blob.upload_from_string(image_data)
-        blob.make_public()
-        return blob.public_url
+            # Check if the file we are uploading exists already.
+            existing_file = _bucket.get_blob("{}/{}".format(bucket, filename))
+            if existing_file:
+                return existing_file.public_url
 
+            # Upload file.
+            # Create new blob.
+            new_blob = _bucket.blob("{}/{}".format(bucket, filename))
+            # Call google upload from filename method on file path.
+            new_blob.upload_from_filename(file_path)
 
-    def upload_loop_image(self, name, image_data):
-        """ Takes image_data and a name and uploads the channel image """
-        bucket = self.bucket("cdn.barscreen.tv")
-        existing = bucket.get_blob("loop_images/{}".format(name))
-        if existing:
-            return existing.public_url
-        blob = bucket.blob("loop_images/{}".format(name))
-        blob.upload_from_string(image_data)
-        blob.make_public()
-        return blob.public_url
+            # If make_public, set blob to public.
+            if make_public:
+                new_blob.make_public()
+            return new_blob.public_url
 
-    def upload_clip_image(self, name, image_data):
-        assert isinstance(image_data, (str, unicode)), 'invalid option for image data, must be data string.'
-        bucket = self.bucket("cdn.barscreen.tv")
-        existing = bucket.get_blob("clip_images/{}".format(name))
-        if existing:
-            return existing.public_url
-        blob = bucket.blob("clip_images/{}".format(name))
-        blob.upload_from_string(image_data)
-        blob.make_public()
-        return blob.public_url
+        except Exception as err:
+            logging.error(
+                "Error uploading file to Google Storage: {} {}".format(type(err), err))
+            return False

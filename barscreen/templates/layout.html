@@ -1,20 +1,35 @@
 <html>
 
 <head>
-  {% block head %}
-  <title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" type="text/css" href="static/styles/style.css">
-  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
-    integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
-  <link href="static/styles/hamburger.css" rel="stylesheet">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="static/scripts/header.js"></script>
-  
+  {% block head %}
+
+  <title>{% block title %}Barscreen{% endblock %}</title>
+
+
+  <!-- CSS to be included on all pages using this layout.-->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/all.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/hamburger.css') }}">
+
+  <!-- Page specific css. -->
+  {% block css %}
+  {% endblock css %}
+
+
+  <!-- JS to be included on all pages using this layout. -->
+  <script src="{{ url_for('static', filename='vendor/jquery.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/header.js') }}"></script>
+
+  <!-- Page specific js-->
+  {% block js %}
+  {% endblock js  %}
+
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  
-  {% endblock %}
+
+  {% endblock head %}
+
 </head>
 
 <body>
@@ -23,7 +38,8 @@
       <div class="nav_container">
         <a href="/">
           <div class="site_logo">
-            <img class="logo" src="static/images/barscreenlogo.png">
+            <img class="logo" src="{{ url_for('static', filename='images/barscreenlogo.png') }}">
+            <!-- <img class="logo" src="static/images/barscreenlogo.png"> -->
             <div class="logo_title">
               <span>BarScreen</span>
             </div>
@@ -36,8 +52,8 @@
         </button>
         <div class="nav_menu">
           <ul>
-            <li><a href="{{ url_for('base.features_page') }}">Features</a></li>
-            <li><a href="{{ url_for('base.about_page') }}">About</a></li>
+            <li><a href="{{ url_for('base.features') }}">Features</a></li>
+            <li><a href="{{ url_for('base.about') }}">About</a></li>
             <li><a href="{{ url_for('dashboard.login') }}">Log In</a></li>
           </ul>
         </div>

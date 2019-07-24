@@ -2,26 +2,43 @@
 
 <head>
   {% block head %}
-  <title>{% block title %}{% endblock %}</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
-  <link rel="stylesheet" type="text/css" title="admin" href="{{ url_for('static', filename='styles/admin.css') }}">
-  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css'
-    integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
-  <link href="{{ url_for('static', filename='styles/hamburger.css') }}" rel="stylesheet">
-  <link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
+  <title>{% block title %}{% endblock title %}</title>
+
+  <!-- Site CSS -->
   <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
-  <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" type="text/javascript"></script>
-  <script src="{{ url_for('static', filename='scripts/header.js') }}" type="text/javascript"></script>
-  <script src="{{ url_for('static', filename='scripts/admin.js') }}" type="text/javascript"></script>
-  <script src="{{ url_for('static', filename='scripts/loader.js') }}" type="text/javascript"></script>
-  <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/css/jquery-editable.css"
-    rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" type="text/css" title="admin" href="{{ url_for('static', filename='css/admin/admin.css') }}">
+  
+  <!-- Vendor CSS-->
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/fontawesome/css/all.css') }}">
+  <link href="{{ url_for('static', filename='vendor/hamburger.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/datatables/jquery.dataTables.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/xeditables/jquery-editable.css') }}" rel="stylesheet">
+
+  <!-- Page Specific CSS -->
+  {% block css %}
+  {% endblock css %}
+
+
+
+  <!-- Vendor JS -->
+  <script src="{{ url_for('static', filename='vendor/jquery.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/datatables/jquery.dataTables.min.js') }}"></script>
   <script>$.fn.poshytip = { defaults: null }</script>
-  <script
-    src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
+  <script src="{{ url_for('static', filename='vendor/xeditables/jquery-editable-poshytip.min.js') }}"></script>
+
+  <!-- Site JS-->
+  <script src="{{ url_for('static', filename='js/header.js') }}" type="text/javascript"></script>
+  <script src="{{ url_for('static', filename='js/admin/admin.js') }}" type="text/javascript"></script>
+  <script src="{{ url_for('static', filename='js/loader.js') }}" type="text/javascript"></script>
+  
+  <!-- Page Specific JS -->
+  {% block js %}
+  {% endblock js %}
+  
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  {% endblock %}
+  
+  {% endblock head %}
 
 <body>
   <div class="site_container">
@@ -49,6 +66,15 @@
       </div>
     </nav>
     <div id="loader"></div>
+    {% with messages = get_flashed_messages() %}
+       {% if messages %}
+        <div class="flash_message">
+          {% for message in messages %}
+             <span>{{ message }}</span>
+          {% endfor %}
+        </div>
+       {% endif %}
+    {% endwith %}
     <div id="content">
     {% block content %}{% endblock %}
     </div>

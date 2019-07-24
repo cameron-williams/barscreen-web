@@ -13,16 +13,16 @@ from barscreen.services.google_clients import Gmail
 base = Blueprint("base", __name__, static_folder="../static")
 
 @base.route("/")
-def base_index():
-    return render_template("index.html")
+def index():
+    return render_template("base/index.html")
 
 @base.route("/about")
-def about_page():
-    return render_template("about.html")
+def about():
+    return render_template("base/about.html")
 
 @base.route("/features")
-def features_page():
-    return render_template("features.html")
+def features():
+    return render_template("base/features.html")
 
 
 @base.route("/contact", methods=["POST", "GET"])
@@ -42,7 +42,7 @@ def contact():
         g.send_email(to="info@barscreen.tv",
                      subject="New Contact Submission", body=msg)
 
-    return render_template("contact.html", form=form)
+    return render_template("base/contact.html", form=form)
 
 
 @base.route("/signup", methods=["POST", "GET"])
@@ -78,4 +78,4 @@ def signup():
         except Exception:
             flash("Unknown error has occurred. Please try again.", category="error")
         flash("Your account is pending, if you are approved we will be in touch with your credentials. Please check email your email.", category="success")
-    return render_template("signup.html", form=form)
+    return render_template("base/signup.html", form=form)

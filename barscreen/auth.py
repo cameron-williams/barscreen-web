@@ -1,33 +1,26 @@
 """
-LoginManager configuration file, and other authentication helpers/functions.
+Authentication helpers/functions.
 """
+
 import binascii
 from flask import (flash, redirect, url_for)
-from flask_login import (LoginManager, login_required,
-                         login_user, current_user)
+from flask_login import current_user
 from functools import wraps
 import hashlib
-from itsdangerous import URLSafeTimedSerializer
+from itsdangerous import URLSafeTimedSerializer, URLSafeSerializer
 import os
 
-from barscreen.database import db
-from barscreen.database.user import User
 from barscreen.config.env import (SECRET_KEY, SECURITY_PASSWORD_SALT)
 
-login_manager = LoginManager()
 
-
-@login_manager.user_loader
-def load_user(user_id):
-    return db.session.query(User).filter(User.id == user_id).first()
-
-
-@login_manager.unauthorized_handler
-def unauthorized_handler():
-    return redirect(url_for("dashboard.login"))
+class InvalidTokenError(Exception):
+    pass
 
 
 def requires_admin(f):
+    """
+    Route decorator. User must be admin to access.
+    """
     @wraps(f)
     def wrapper(*args, **kwargs):
         if not current_user.admin:
@@ -37,27 +30,38 @@ def requires_admin(f):
     return wrapper
 
 
-class InvalidTokenError(Exception):
-    pass
-
-
-def generate_confirmation_token(email):
-    """ Generates a password creation token """
-    serializer = URLSafeTimedSerializer(SECRET_KEY)
+def generate_token(email, expires=True):
+    """
+    Generates a mutli-use token, can specify if it expires or not.
+    """
+    if expires:
+        serializer = URLSafeTimedSerializer(SECRET_KEY)
+    else:
+        serializer = URLSafeSerializer(SECRET_KEY)
     return serializer.dumps(email, salt=SECURITY_PASSWORD_SALT)
 
 
 def confirm_token(token, expiration=3600):
-    """ Confirms given password generation token """
-    serializer = URLSafeTimedSerializer(SECRET_KEY)
+    """
+    Confirms given token. Will return the value
+    of it if successful, otherwise raises InvalidTokenError.
+    """
     try:
-        email = serializer.loads(
-            token,
-            salt=SECURITY_PASSWORD_SALT,
-            max_age=expiration
-        )
+        if expiration:
+            serializer = URLSafeTimedSerializer(SECRET_KEY)
+            email = serializer.loads(
+                token,
+                salt=SECURITY_PASSWORD_SALT,
+                max_age=expiration
+            )
+        else:
+            serializer = URLSafeSerializer(SECRET_KEY)
+            email = serializer.loads(
+                token,
+                salt=SECURITY_PASSWORD_SALT
+            )
     except Exception:
-        raise InvalidTokenError("Token is expired.")
+        raise InvalidTokenError
     return email
 
 

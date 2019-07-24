@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+
+{% block title %}BarsScreen - Contact{% endblock title %}
+
+{% block js %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/base/contact.css') }}">
+{% endblock js %}
+
+{% block content %}
+<div class="contact_splash" id="contact">
+</div>
+<div class="section_splash">
+    <div class="title">
+        <h3>Contact</h3>
+    </div>
+</div>
+<div class="section">
+    <div class="two_section">
+        <div class="left_section">
+            <h3>Drop us a message and we'll get back to you.</h3>
+            <div class="contact_item">
+                <h4>Email</h4>
+                <p><a href="info@barscreen.tv">info@barscreen.tv</a></p>
+            </div>
+            <div class="contact_item">
+                <h4>Phone</h4>
+                <p>+1-778-350-4548</p>
+            </div>
+            <div class="contact_item">
+                <h4>Address</h4>
+                <p>777 Fort St</p>
+                <p>Victoria, BC</p>
+            </div>
+        </div>
+        <div class="right_section">
+            <h3>Contact Form</h3>
+            <form method="POST">
+                {{ form.csrf_token }}
+                <feildset class="form_name">
+                    {{ form.name }}
+                    <!--<input type="text" id="name" required="required" class="form_input" placeholder="Name"style>-->
+                </feildset>
+                <feildset class="form_email">
+                    {{ form.email }}
+                    <!--<input type="text" id="email" required="required" placeholder="Email" class="form_input" style>-->
+                </feildset>
+                {{ form.message }}
+                <feildset class="form_message">
+                    <!--<textarea name="message" rows="4" cols="40" id="phone" placeholder="Message" required="required" class="form_input"></textarea>-->
+                </feildset>
+                <feildset class="submit">
+                    {{ form.submit }}
+                </feildset>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="map" style="width: 100%">
+        <iframe width="100%" height="300"
+            src="https://maps.google.com/maps?width=100%&amp;height=600&amp;hl=en&amp;q=777%20Forts%20St.+(BarScreen)&amp;ie=UTF8&amp;t=&amp;z=14&amp;iwloc=B&amp;output=embed"
+            frameborder="0" scrolling="no" marginheight="0" marginwidth="0"><a
+                href="https://www.maps.ie/map-my-route/">Plot a route map</a></iframe>
+    </div>
+</div>
+{% endblock %}
