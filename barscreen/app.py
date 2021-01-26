@@ -6,7 +6,6 @@ This is the web application that runs the Barscreen roku dashboard and admin men
 https://barscreen.tv/
 
 
-2019-06-06
 """
 import os
 import logging
@@ -16,7 +15,6 @@ from flask import (Flask, render_template, request,
                    abort, jsonify, redirect, url_for)
 from flask_login import (LoginManager, login_required, login_user, current_user)
 from flask_migrate import Migrate
-from systemd.journal import JournaldLogHandler
 
 from barscreen.login import login_manager
 from barscreen.config.env import (
@@ -68,13 +66,6 @@ def create_app():
     app.register_blueprint(roku, url_prefix="/roku" if not SUBDOMAIN_ROUTING else None,
                            subdomain="roku" if SUBDOMAIN_ROUTING else None)
 
-    # Add journald logging support to default Flask logger. todo maybe remove this?
-    journald_handler = JournaldLogHandler()
-    journald_handler.setFormatter(logging.Formatter(
-        '[%(levelname)s::%(file)s::%(line)s] %(message)s'
-    ))
-    journald_handler.setLevel(logging.WARN)
-    app.logger.addHandler(journald_handler)
 
     # Custom error page for ANY app 404.
     @app.errorhandler(404)
